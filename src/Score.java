@@ -1,46 +1,56 @@
-package skeletonCodeAssgnmt2;
+import java.util.*;
 
 public class Score {
-	private int missedWords;
-	private int caughtWords;
-	private int gameScore;
+	private AtomicInteger missedWords;
+	private AtomicInteger caughtWords;
+	private AtomicInteger gameScore;
+   private AtomicInteger wrong;
 	
 	Score() {
-		missedWords=0;
-		caughtWords=0;
-		gameScore=0;
+		missedWords=new AtomicInteger(0);
+		caughtWords=new AtomicInteger(0);
+      wrong = new AtomicInteger(0);
+		gameScore=new AtomicInteger(0);
 	}
 		
 	// all getters and setters must be synchronized
 	
 	public int getMissed() {
-		return missedWords;
+		return missedWords.get();
 	}
 
 	public int getCaught() {
-		return caughtWords;
+		return caughtWords.get();
 	}
 	
 	public int getTotal() {
-		return (missedWords+caughtWords);
+		return (missedWords.addAndGet(caughtWords.get()));
 	}
 
 	public int getScore() {
-		return gameScore;
+		return gameScore.get();
 	}
 	
 	public void missedWord() {
-		missedWords++;
+		missedWords.incrementAndGet();
 	}
 
-	public void caughtWord(int length) {
-		caughtWords++;
-		gameScore+=length;
+	public synchronized void caughtWord(int length) {
+		caughtWords.incrementAndGet();
+		gameScore.addAndGet(length);
 	}
 
 	public void resetScore() {
-		caughtWords=0;
-		missedWords=0;
-		gameScore=0;
+		caughtWords.set(0);
+		missedWords.set(0);
+		gameScore.set(0);
 	}
+   
+   public int getWrong(){
+      return wrong.get();
+   }
+   
+   public void setWrong(){
+      wrong.incrementAndGet();
+   }
 }

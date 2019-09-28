@@ -1,5 +1,3 @@
-package skeletonCodeAssgnmt2;
-
 public class WordRecord {
 	private String text;
 	private  int x;

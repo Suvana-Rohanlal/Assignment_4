@@ -1,5 +1,3 @@
-package skeletonCodeAssgnmt2;
-
 import javax.swing.*;
 
 import java.awt.*;
@@ -98,9 +96,20 @@ public class WordApp {
 			      }
 			    });
 		
+      JButton quitB = new JButton("Quit");;
+			
+				// add the listener to the jbutton to handle the "pressed" event
+				quitB.addActionListener(new ActionListener()
+			    {
+			      public void actionPerformed(ActionEvent e)
+			      {
+			    	  System.exit(0);
+			      }
+			    });
+
 		b.add(startB);
 		b.add(endB);
-		
+		b.add(quitB);
 		g.add(b);
     	
       	frame.setLocationRelativeTo(null);  // Center window on screen.
@@ -136,10 +145,12 @@ public static String[] getDictFromFile(String filename) {
 	public static void main(String[] args) {
     	
 		//deal with command line arguments
-		totalWords=Integer.parseInt(args[0]);  //total words to fall
-		noWords=Integer.parseInt(args[1]); // total words falling at any point
+		//totalWords=Integer.parseInt(args[0]);  //total words to fall
+      totalWords=10;
+		//noWords=Integer.parseInt(args[1]); // total words falling at any point
+      noWords=2;
 		assert(totalWords>=noWords); // this could be done more neatly
-		String[] tmpDict=getDictFromFile(args[2]); //file of words
+		String[] tmpDict= getDictFromFile("example_dict.txt");//getDictFromFile(args[2]); //file of words
 		if (tmpDict!=null)
 			dict= new WordDictionary(tmpDict);
 		
