@@ -13,7 +13,7 @@ public class WordPanel extends JPanel implements Runnable {
 		private WordRecord[] words;
 		private int noWords;
 		private int maxY;
-
+      private HandleWords handle;
 		
 		public void paintComponent(Graphics g) {
 		    int width = getWidth();
@@ -33,16 +33,33 @@ public class WordPanel extends JPanel implements Runnable {
 		   
 		  }
 		
-		WordPanel(WordRecord[] words, int maxY) {
+		WordPanel(WordRecord[] words, int maxY, HandleWords handle) {
 			this.words=words; //will this work?
 			noWords = words.length;
 			done=false;
 			this.maxY=maxY;		
+         this.handle = handle;
 		}
 		
 		public void run() {
-			//add in code to animate this
+			handle.startRound();
+         while(!handle.getEnd()){
+            if(handle.getChange()){
+               repaint();
+               handle.resetChange();
+            }
+            
+            try{
+               Thread.sleep(2);
+            }catch(InterruptedException e){
+               e.printStackTrace();
+            }
+         }
 		}
+      
+      public void repaintOnce(){
+         repaint();
+      }
 
 	}
 

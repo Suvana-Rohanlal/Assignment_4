@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.InterruptedException;
 
 
 import java.util.Scanner;
@@ -16,7 +17,7 @@ public class WordApp {
 	static int noWords=4;
 	static int totalWords;
 
-   	static int frameX=1000;
+   static int frameX=1000;
 	static int frameY=600;
 	static int yLimit=480;
 
@@ -28,7 +29,8 @@ public class WordApp {
 
 	static WordPanel w;
 	
-	
+	static JLabel[] labels;
+   static HandleWords handle;
 	
 	public static void setupGUI(int frameX,int frameY,int yLimit) {
 		// Frame init and dimensions
@@ -41,7 +43,7 @@ public class WordApp {
       	g.setSize(frameX,frameY);
  
     	
-		w = new WordPanel(words,yLimit);
+		w = new WordPanel(words,yLimit,handle);
 		w.setSize(frameX,yLimit+100);
 	    g.add(w);
 	    
@@ -50,7 +52,8 @@ public class WordApp {
 	    txt.setLayout(new BoxLayout(txt, BoxLayout.LINE_AXIS)); 
 	    JLabel caught =new JLabel("Caught: " + score.getCaught() + "    ");
 	    JLabel missed =new JLabel("Missed:" + score.getMissed()+ "    ");
-	    JLabel scr =new JLabel("Score:" + score.getScore()+ "    ");    
+	    JLabel scr =new JLabel("Score:" + score.getScore()+ "    "); 
+       labels = new JLabel[]{caught,missed,scr};   
 	    txt.add(caught);
 	    txt.add(missed);
 	    txt.add(scr);
@@ -61,8 +64,10 @@ public class WordApp {
 	   textEntry.addActionListener(new ActionListener()
 	    {
 	      public void actionPerformed(ActionEvent evt) {
+            if(handle.getActive()){
 	          String text = textEntry.getText();
 	          //[snip]
+             }
 	          textEntry.setText("");
 	          textEntry.requestFocus();
 	      }
@@ -81,7 +86,9 @@ public class WordApp {
 		    {
 		      public void actionPerformed(ActionEvent e)
 		      {
-		    	  //[snip]
+		    	  if(!handle.getActive()){
+               new Thread(w).start();
+              }
 		    	  textEntry.requestFocus();  //return focus to the text entry field
 		      }
 		    });
@@ -92,7 +99,9 @@ public class WordApp {
 			    {
 			      public void actionPerformed(ActionEvent e)
 			      {
-			    	  //[snip]
+			    	  if(handle.getActive()){
+                  handle.getEnd();
+                 }
 			      }
 			    });
 		
@@ -143,7 +152,7 @@ public static String[] getDictFromFile(String filename) {
 	}
 
 	public static void main(String[] args) {
-    	
+    	done = true;
 		//deal with command line arguments
 		//totalWords=Integer.parseInt(args[0]);  //total words to fall
       totalWords=10;
@@ -151,26 +160,25 @@ public static String[] getDictFromFile(String filename) {
       noWords=2;
 		assert(totalWords>=noWords); // this could be done more neatly
 		String[] tmpDict= getDictFromFile("example_dict.txt");//getDictFromFile(args[2]); //file of words
-		if (tmpDict!=null)
+		if (tmpDict!=null){
 			dict= new WordDictionary(tmpDict);
-		
+		}
 		WordRecord.dict=dict; //set the class dictionary for the words.
 		
 		words = new WordRecord[noWords];  //shared array of current words
 		
 		//[snip]
 		
-		setupGUI(frameX, frameY, yLimit);  
-    	//Start WordPanel thread - for redrawing animation
-
 		int x_inc=(int)frameX/noWords;
 	  	//initialize shared array of current words
 
 		for (int i=0;i<noWords;i++) {
 			words[i]=new WordRecord(dict.getNewWord(),i*x_inc,yLimit);
 		}
+      handle = new HandleWords();
 
-
+      setupGUI(frameX, frameY, yLimit);  
+    	//Start WordPanel thread - for redrawing animation
 	}
 
 }

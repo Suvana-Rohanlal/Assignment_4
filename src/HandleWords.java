@@ -2,7 +2,7 @@ import java.util.*;
 import javax.swing.*;
 
 public class HandleWords{
-   public Threads[] thread;
+   private Threads[] thread;
    
    private volatile boolean end,change,pause,active;
    
@@ -12,8 +12,8 @@ public class HandleWords{
       super();
       this.thread = new Threads[WordApp.words.length];
       end=true;
-      pause=true;
-      active=true;
+      pause=false;
+      active=false;
    }
    
    public void update(){
@@ -21,7 +21,6 @@ public class HandleWords{
          WordApp.labels[0].setText("Caught:" + WordApp.score.getCaught()+"  ");
          WordApp.labels[1].setText("Missed:" + WordApp.score.getMissed()+"  ");
          WordApp.labels[2].setText("Score:" + WordApp.score.getScore()+"  ");
-         WordApp.labels[3].setText("Incorrect Words:" + WordApp.score.getIncorrectWords()+"  ");
          setChange();
       }
    }
@@ -43,7 +42,7 @@ public class HandleWords{
       
    }
    
-   public void start(){
+   public void startRound(){
       end=false;
       active= true;
       int count =0;

@@ -10,15 +10,15 @@ public class Threads implements Runnable{
    
    @Override
    public void run(){
-      while(!handle.done()){
-         if(record.miss()){
+      while(!handle.getEnd()){
+         if(record.dropped()){
             handle.wordMissed();
             record.resetWord();
             handle.setChange();
          }
-         else if(handle.paused()){
-            continue;
-         }
+         //else if(handle.paused()){
+           // continue;
+         //}
          else{
             record.drop(1);
             handle.update();
@@ -27,7 +27,7 @@ public class Threads implements Runnable{
             Thread.sleep(record.getSpeed()/15);
          }
          catch(InterruptedException e){
-            e.printStackTrac();
+            e.printStackTrace();
          }
        }
      }

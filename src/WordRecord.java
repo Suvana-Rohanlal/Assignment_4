@@ -101,5 +101,15 @@ public class WordRecord {
 	public synchronized  boolean dropped() {
 		return dropped;
 	}
+   
+   @Override
+   public boolean equals(Object obj){
+      if(!obj.getClass().equals(this.getClass())){
+         return false;
+      }
+      WordRecord wobj = ((WordRecord)obj);
+      
+      return (this.getWord().equals(wobj.getWord()) && (this.getY() == wobj.getY()));
+   }
 
 }
