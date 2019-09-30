@@ -5,12 +5,10 @@ public class Score {
 	private AtomicInteger missedWords;
 	private AtomicInteger caughtWords;
 	private AtomicInteger gameScore;
-   private AtomicInteger wrong;
 	
 	Score() {
 		missedWords=new AtomicInteger(0);
 		caughtWords=new AtomicInteger(0);
-      wrong = new AtomicInteger(0);
 		gameScore=new AtomicInteger(0);
 	}
 		
@@ -37,7 +35,7 @@ public class Score {
 	}
 
 	public synchronized void caughtWord(int length) {
-		caughtWords.incrementAndGet();
+		caughtWords.getAndIncrement();
 		gameScore.addAndGet(length);
 	}
 
@@ -47,11 +45,4 @@ public class Score {
 		gameScore.set(0);
 	}
    
-   public int getWrong(){
-      return wrong.get();
-   }
-   
-   public void setWrong(){
-      wrong.incrementAndGet();
-   }
 }

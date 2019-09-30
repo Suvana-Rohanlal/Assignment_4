@@ -3,6 +3,7 @@ import javax.swing.*;
 
 public class HandleWords{
    private Threads[] thread;
+   private List<Integer>scores;
    
    private volatile boolean end,change,pause,active;
    
@@ -14,6 +15,7 @@ public class HandleWords{
       end=true;
       pause=false;
       active=false;
+      scores = new ArrayList<Integer>();
    }
    
    public void update(){
@@ -59,6 +61,7 @@ public class HandleWords{
       int missed = WordApp.score.getMissed();
       if(missed>=10){
          stop();
+         display("l");
          setChange();
          reset();
          WordApp.w.repaintOnce();
@@ -90,6 +93,7 @@ public class HandleWords{
    
    public void won(){
       stop();
+      display("w");
       setChange();
       reset();
       WordApp.w.repaintOnce();
@@ -112,6 +116,29 @@ public class HandleWords{
       return active;
    }
    
-
+   public void display(String d){
+     String out ="";
+     scores.add(WordApp.score.getScore());
+     if(d.equals("w")){      
+       out = "Congratulations! You won!\n Your score is "+WordApp.score.getScore();
+    }
+     else{
+       out = "Sorry, Game over! \n Your score is "+WordApp.score.getScore();
+     }
+     String n="";
+     int high = WordApp.score.getScore();
+     boolean y=false;
+     for(int s: scores){
+      if(s < high){
+         y=true;
+      }
+     }
+     if(y){
+      out = out +"\n New High Score: "+WordApp.score.getScore();
+     }
+     
+     JOptionPane.showMessageDialog(WordApp.w, out);
+   
+   }
 
 }

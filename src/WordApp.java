@@ -53,6 +53,7 @@ public class WordApp {
 	    JLabel caught =new JLabel("Caught: " + score.getCaught() + "    ");
 	    JLabel missed =new JLabel("Missed:" + score.getMissed()+ "    ");
 	    JLabel scr =new JLabel("Score:" + score.getScore()+ "    "); 
+      
        labels = new JLabel[]{caught,missed,scr};   
 	    txt.add(caught);
 	    txt.add(missed);
@@ -66,6 +67,9 @@ public class WordApp {
 	      public void actionPerformed(ActionEvent evt) {
             if(handle.getActive()){
 	          String text = textEntry.getText();
+             if(!handle.check(text)){
+               handle.setChange();
+             }
 	          //[snip]
              }
 	          textEntry.setText("");
@@ -100,7 +104,7 @@ public class WordApp {
 			      public void actionPerformed(ActionEvent e)
 			      {
 			    	  if(handle.getActive()){
-                  handle.getEnd();
+                  handle.end();
                  }
 			      }
 			    });
@@ -154,12 +158,12 @@ public static String[] getDictFromFile(String filename) {
 	public static void main(String[] args) {
     	done = true;
 		//deal with command line arguments
-		//totalWords=Integer.parseInt(args[0]);  //total words to fall
-      totalWords=10;
-		//noWords=Integer.parseInt(args[1]); // total words falling at any point
+		totalWords=Integer.parseInt(args[0]);  //total words to fall
+     // totalWords=10;
+		noWords=Integer.parseInt(args[1]); // total words falling at any point
       noWords=2;
 		assert(totalWords>=noWords); // this could be done more neatly
-		String[] tmpDict= getDictFromFile("example_dict.txt");//getDictFromFile(args[2]); //file of words
+		String[] tmpDict= getDictFromFile(args[2]);//getDictFromFile(args[2]); //file of words
 		if (tmpDict!=null){
 			dict= new WordDictionary(tmpDict);
 		}
